@@ -1,5 +1,6 @@
 from pyscipopt import Model, quicksum
 from parser import main_parser
+import time
 
 def main_int_prog(input_filename, results_filename):
     model = Model()
@@ -35,21 +36,29 @@ def main_int_prog(input_filename, results_filename):
     print("Objective: OK")
 
     #Model
+    start_time = time.time()
     model.optimize()
-    print("Optimizer : OK")
+    print("Optimization done in {} seconds".format(time.time() - start_time))
 
     if model.getStatus() != 'optimal':
         print('Not feasible')
     else:
+        cameras_1 = 0
+        cameras_2 = 0
         with open(results_filename,"a") as f:
             for elt in X:
                 if model.getVal(X[elt]) == 1:
-                    f.write("1,"+str(elt[0])+","+str(elt[1])+"\n")      
+                    f.write("1,"+str(elt[0])+","+str(elt[1])+"\n")  
+                    cameras_1 += 1
             for elt in Y:
                 if model.getVal(Y[elt]) == 1:
                     f.write("2,"+str(elt[0])+","+str(elt[1])+"\n")
+                    cameras_2 += 1
+        cost = cameras_1*cameras[0][1] + cameras_2*cameras[1][1]
+        print("Number of type 1 camera : {}".format(cameras_1))
+        print("Number of type 2 camera : {}".format(cameras_2))
+        print("Total cost : {}".format(cost))
         f.close()
-        print("Results append to the file: OK")
 
 
 def getPositionAroundArtwork(pos_art, r_camera):
