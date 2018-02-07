@@ -99,3 +99,6 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+libscip.5.0.dylib
+test.py

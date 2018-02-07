@@ -1,3 +1,8 @@
+def main_parser(filename):
+    cameras, artworks = parser(filename)
+    l, c = get_grid_dimensions(artworks)
+    return cameras, artworks, l, c
+
 def parser(filename):
     """
     Function that parses the entry doc into 2 variables:
